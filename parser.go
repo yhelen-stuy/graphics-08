@@ -16,6 +16,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 	}
 
 	scanner := bufio.NewScanner(f)
+	s := MakeStack()
 	for scanner.Scan() {
 		switch c := strings.TrimSpace(scanner.Text()); c {
 		case "line":
@@ -26,6 +27,12 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			e.AddEdge(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4], fargs[5])
+
+		case "pop":
+			s.Pop()
+
+		case "push":
+			s.Push(t)
 
 		case "ident":
 			t.Ident()
@@ -38,7 +45,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			scale := MakeScale(fargs[0], fargs[1], fargs[2])
-			t, _ = t.Mult(scale)
+			t, _ = scale.Mult(t)
 
 		case "move":
 			args := getArgs(scanner)
@@ -48,7 +55,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			translate := MakeTranslate(fargs[0], fargs[1], fargs[2])
-			t, _ = t.Mult(translate)
+			t, _ = translate.Mult(t)
 
 		case "rotate":
 			args := getArgs(scanner)
@@ -61,13 +68,13 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			switch args[0] {
 			case "x":
 				rot := MakeRotX(deg)
-				t, _ = t.Mult(rot)
+				t, _ = rot.Mult(t)
 			case "y":
 				rot := MakeRotY(deg)
-				t, _ = t.Mult(rot)
+				t, _ = rot.Mult(t)
 			case "z":
 				rot := MakeRotZ(deg)
-				t, _ = t.Mult(rot)
+				t, _ = rot.Mult(t)
 			default:
 				// TODO: Error handling
 				fmt.Println("Rotate fail")
@@ -117,6 +124,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddBox(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4], fargs[5])
+			p, _ = p.Mult(s.Peek())
+			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
+			p = MakeMatrix(4, 0)
 
 		case "sphere":
 			args := getArgs(scanner)
@@ -126,6 +136,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddSphere(fargs[0], fargs[1], fargs[2], fargs[3])
+			p, _ = p.Mult(s.Peek())
+			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
+			p = MakeMatrix(4, 0)
 
 		case "torus":
 			args := getArgs(scanner)
@@ -135,20 +148,12 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddTorus(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4])
-
-		case "clear":
-			e = MakeMatrix(4, 0)
+			p, _ = p.Mult(s.Peek())
+			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
-
-		case "apply":
-			// TODO: Error handling
-			e, _ = e.Mult(t)
-			p, _ = p.Mult(t)
 
 		case "display":
 			image.Clear()
-			image.DrawLines(e, Color{r: 255, b: 0, g: 0})
-			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			image.Display()
 
 		case "save":
@@ -158,8 +163,6 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 				continue
 			}
 			image.Clear()
-			image.DrawLines(e, Color{r: 255, b: 0, g: 0})
-			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			image.SavePPM(args[0])
 
 		case "quit":
