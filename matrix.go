@@ -111,6 +111,16 @@ func (m2 *Matrix) Mult(m1 *Matrix) (*Matrix, error) {
 	return prod, nil
 }
 
+func (m *Matrix) Copy() *Matrix {
+	new := MakeMatrix(m.rows, m.cols)
+	for i := range m.mat {
+		for j, c := range m.mat[i] {
+			new.mat[i][j] = c
+		}
+	}
+	return new
+}
+
 func (m *Matrix) AddCol(col []float64) error {
 	if m.rows != len(col) {
 		return errors.New("Error: Incorrect num of elements")

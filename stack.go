@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	// "fmt"
 )
 
 type Stack struct {
@@ -16,11 +17,11 @@ func MakeStack() *Stack {
 	return &Stack{stack: s}
 }
 
-func (s Stack) Push(m *Matrix) {
+func (s *Stack) Push(m *Matrix) {
 	s.stack = append(s.stack, m)
 }
 
-func (s Stack) Pop() *Matrix {
+func (s *Stack) Pop() *Matrix {
 	if s.isEmpty() {
 		return nil
 	}
@@ -30,16 +31,16 @@ func (s Stack) Pop() *Matrix {
 	return popped
 }
 
-func (s Stack) isEmpty() bool {
+func (s *Stack) isEmpty() bool {
 	return len(s.stack) == 0
 }
 
-func (s Stack) Peek() *Matrix {
+func (s *Stack) Peek() *Matrix {
 	l := len(s.stack)
 	return s.stack[l-1]
 }
 
-func (s Stack) String() string {
+func (s *Stack) String() string {
 	var buf bytes.Buffer
 	for _, m := range s.stack {
 		buf.WriteString(m.String())

@@ -32,7 +32,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			s.Pop()
 
 		case "push":
-			s.Push(t)
+			s.Push(t.Copy())
 
 		case "ident":
 			t.Ident()
@@ -126,6 +126,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			p.AddBox(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4], fargs[5])
 			p, _ = p.Mult(s.Peek())
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
+			fmt.Println(p)
 			p = MakeMatrix(4, 0)
 
 		case "sphere":
@@ -153,7 +154,6 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			p = MakeMatrix(4, 0)
 
 		case "display":
-			image.Clear()
 			image.Display()
 
 		case "save":
@@ -162,7 +162,6 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 				fmt.Println(err)
 				continue
 			}
-			image.Clear()
 			image.SavePPM(args[0])
 
 		case "quit":

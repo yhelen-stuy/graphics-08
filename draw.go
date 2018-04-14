@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	sphereStepSize float64 = 1.0 / 50
+	sphereStepSize float64 = 1.0 / 20
 	torusStepSize  float64 = 1.0 / 25
 )
 
