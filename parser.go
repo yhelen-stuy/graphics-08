@@ -124,9 +124,8 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddBox(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4], fargs[5])
-			p, _ = p.Mult(s.Peek())
+			p, _ = p.Mult(t)
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
-			fmt.Println(p)
 			p = MakeMatrix(4, 0)
 
 		case "sphere":
@@ -137,7 +136,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddSphere(fargs[0], fargs[1], fargs[2], fargs[3])
-			p, _ = p.Mult(s.Peek())
+			p, _ = p.Mult(t)
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
 
@@ -149,7 +148,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddTorus(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4])
-			p, _ = p.Mult(s.Peek())
+			p, _ = p.Mult(t)
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
 

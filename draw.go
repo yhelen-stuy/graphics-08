@@ -22,6 +22,9 @@ func (image Image) DrawPolygons(p *Matrix, c Color) {
 			continue
 		}
 		if cross[2] > 0 {
+			fmt.Printf("(%d %d) (%d %d)\n", int(m[0][i]), int(m[1][i]), int(m[0][i+1]), int(m[1][i+1]))
+			fmt.Printf("(%d %d) (%d %d)\n", int(m[0][i+1]), int(m[1][i+1]), int(m[0][i+2]), int(m[1][i+2]))
+			fmt.Printf("(%d %d) (%d %d)\n", int(m[0][i+2]), int(m[1][i+2]), int(m[0][i]), int(m[1][i]))
 			image.DrawLine(c, int(m[0][i]), int(m[1][i]), int(m[0][i+1]), int(m[1][i+1]))
 			image.DrawLine(c, int(m[0][i+1]), int(m[1][i+1]), int(m[0][i+2]), int(m[1][i+2]))
 			image.DrawLine(c, int(m[0][i+2]), int(m[1][i+2]), int(m[0][i]), int(m[1][i]))
