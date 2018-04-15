@@ -11,9 +11,6 @@ type Stack struct {
 
 func MakeStack() *Stack {
 	s := make([]*Matrix, 0)
-	m := MakeMatrix(4, 4)
-	m.Ident()
-	s = append(s, m)
 	return &Stack{stack: s}
 }
 
@@ -36,6 +33,9 @@ func (s *Stack) isEmpty() bool {
 }
 
 func (s *Stack) Peek() *Matrix {
+	if s.isEmpty() {
+		return nil
+	}
 	l := len(s.stack)
 	return s.stack[l-1]
 }

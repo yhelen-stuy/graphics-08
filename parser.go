@@ -30,9 +30,13 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 
 		case "pop":
 			s.Pop()
+			// fmt.Println("after pop")
+			// fmt.Println(s)
 
 		case "push":
 			s.Push(t.Copy())
+			// fmt.Println("after push")
+			// fmt.Println(s)
 
 		case "ident":
 			t.Ident()
@@ -45,7 +49,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			scale := MakeScale(fargs[0], fargs[1], fargs[2])
+			t = s.Pop()
 			t, _ = scale.Mult(t)
+			s.Push(t.Copy())
 
 		case "move":
 			args := getArgs(scanner)
@@ -55,7 +61,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			translate := MakeTranslate(fargs[0], fargs[1], fargs[2])
+			t = s.Pop()
 			t, _ = translate.Mult(t)
+			s.Push(t.Copy())
 
 		case "rotate":
 			args := getArgs(scanner)
@@ -65,6 +73,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			// TODO: Error handling
 			deg, _ := strconv.ParseFloat(args[1], 64)
+			t = s.Pop()
 			switch args[0] {
 			case "x":
 				rot := MakeRotX(deg)
@@ -80,6 +89,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 				fmt.Println("Rotate fail")
 				continue
 			}
+			s.Push(t.Copy())
 
 		case "circle":
 			args := getArgs(scanner)
@@ -124,7 +134,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddBox(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4], fargs[5])
-			p, _ = p.Mult(t)
+			p, _ = p.Mult(s.Peek())
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
 
@@ -136,7 +146,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddSphere(fargs[0], fargs[1], fargs[2], fargs[3])
-			p, _ = p.Mult(t)
+			p, _ = p.Mult(s.Peek())
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
 
@@ -148,7 +158,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			p.AddTorus(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4])
-			p, _ = p.Mult(t)
+			p, _ = p.Mult(s.Peek())
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
 
@@ -172,6 +182,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			continue
 		}
+		fmt.Println(t)
 	}
 	return nil
 }
