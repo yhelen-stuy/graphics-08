@@ -113,11 +113,12 @@ func (m2 *Matrix) Mult(m1 *Matrix) (*Matrix, error) {
 
 func (m *Matrix) Copy() *Matrix {
 	new := MakeMatrix(m.rows, m.cols)
+	new.rows = m.rows
+	new.cols = m.cols
 	for i := range m.mat {
-		for j, c := range m.mat[i] {
-			new.mat[i][j] = c
-		}
+		copy(new.mat[i], m.mat[i])
 	}
+	fmt.Printf("%p, %p\n", new.mat[0], m.mat[0])
 	return new
 }
 

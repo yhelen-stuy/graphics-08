@@ -30,13 +30,17 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 
 		case "pop":
 			s.Pop()
-			// fmt.Println("after pop")
-			// fmt.Println(s)
+			fmt.Println("after pop")
+			fmt.Println(s)
 
 		case "push":
+			fmt.Println("Printing t")
+			fmt.Println(t)
+			fmt.Println("before push")
+			fmt.Println(s)
 			s.Push(t.Copy())
-			// fmt.Println("after push")
-			// fmt.Println(s)
+			fmt.Println("after push")
+			fmt.Println(s)
 
 		case "ident":
 			t.Ident()
@@ -182,7 +186,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			continue
 		}
-		fmt.Println(t)
+		// fmt.Println(t)
 	}
 	return nil
 }

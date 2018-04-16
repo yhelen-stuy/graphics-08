@@ -40,7 +40,7 @@ func (s *Stack) Peek() *Matrix {
 	return s.stack[l-1]
 }
 
-func (s *Stack) String() string {
+func (s Stack) String() string {
 	var buf bytes.Buffer
 	for _, m := range s.stack {
 		buf.WriteString(m.String())
