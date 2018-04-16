@@ -27,6 +27,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			e.AddEdge(fargs[0], fargs[1], fargs[2], fargs[3], fargs[4], fargs[5])
+			e, _ = e.Mult(s.Peek())
+			image.DrawLines(e, Color{r: 255, b: 0, g: 0})
+			e = MakeMatrix(4, 0)
 
 		case "pop":
 			s.Pop()
@@ -106,6 +109,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			fargs := numerize(args)
 			e.AddCircle(fargs[0], fargs[1], fargs[2], fargs[3])
+			e, _ = e.Mult(s.Peek())
+			image.DrawLines(e, Color{r: 255, b: 0, g: 0})
+			e = MakeMatrix(4, 0)
 
 		case "hermite":
 			args := getArgs(scanner)
@@ -119,6 +125,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 				fmt.Println(err)
 				continue
 			}
+			e, _ = e.Mult(s.Peek())
+			image.DrawLines(e, Color{r: 255, b: 0, g: 0})
+			e = MakeMatrix(4, 0)
 
 		case "bezier":
 			args := getArgs(scanner)
@@ -132,6 +141,9 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 				fmt.Println(err)
 				continue
 			}
+			e, _ = e.Mult(s.Peek())
+			image.DrawLines(e, Color{r: 255, b: 0, g: 0})
+			e = MakeMatrix(4, 0)
 
 		case "box":
 			args := getArgs(scanner)
