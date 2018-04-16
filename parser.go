@@ -30,17 +30,16 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 
 		case "pop":
 			s.Pop()
-			fmt.Println("after pop")
-			fmt.Println(s)
 
 		case "push":
-			fmt.Println("Printing t")
-			fmt.Println(t)
-			fmt.Println("before push")
-			fmt.Println(s)
-			s.Push(t.Copy())
-			fmt.Println("after push")
-			fmt.Println(s)
+			// fmt.Println("Printing t")
+			// fmt.Println(t)
+			t := s.Peek()
+			if t != nil {
+				s.Push(t.Copy())
+			}
+			// fmt.Println("after push")
+			// fmt.Println(s)
 
 		case "ident":
 			t.Ident()
@@ -77,23 +76,27 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			}
 			// TODO: Error handling
 			deg, _ := strconv.ParseFloat(args[1], 64)
-			t = s.Pop()
 			switch args[0] {
 			case "x":
+				t = s.Pop()
 				rot := MakeRotX(deg)
 				t, _ = rot.Mult(t)
+				s.Push(t.Copy())
 			case "y":
+				t = s.Pop()
 				rot := MakeRotY(deg)
 				t, _ = rot.Mult(t)
+				s.Push(t.Copy())
 			case "z":
+				t = s.Pop()
 				rot := MakeRotZ(deg)
 				t, _ = rot.Mult(t)
+				s.Push(t.Copy())
 			default:
 				// TODO: Error handling
 				fmt.Println("Rotate fail")
 				continue
 			}
-			s.Push(t.Copy())
 
 		case "circle":
 			args := getArgs(scanner)
@@ -141,6 +144,7 @@ func ParseFile(filename string, t *Matrix, p *Matrix, e *Matrix, image *Image) e
 			p, _ = p.Mult(s.Peek())
 			image.DrawPolygons(p, Color{r: 0, b: 255, g: 0})
 			p = MakeMatrix(4, 0)
+			fmt.Println("drawing box")
 
 		case "sphere":
 			args := getArgs(scanner)

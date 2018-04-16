@@ -11,6 +11,9 @@ type Stack struct {
 
 func MakeStack() *Stack {
 	s := make([]*Matrix, 0)
+	m := MakeMatrix(4, 4)
+	m.Ident()
+	s = append(s, m)
 	return &Stack{stack: s}
 }
 

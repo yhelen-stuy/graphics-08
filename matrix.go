@@ -118,7 +118,6 @@ func (m *Matrix) Copy() *Matrix {
 	for i := range m.mat {
 		copy(new.mat[i], m.mat[i])
 	}
-	fmt.Printf("%p, %p\n", new.mat[0], m.mat[0])
 	return new
 }
 
