@@ -8,7 +8,7 @@ import (
 
 const (
 	sphereStepSize float64 = 1.0 / 20
-	torusStepSize  float64 = 1.0 / 25
+	torusStepSize  float64 = 1.0 / 20
 )
 
 func (image Image) DrawPolygons(p *Matrix, c Color) {
